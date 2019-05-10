@@ -15,7 +15,10 @@ config :bowman, BowmanWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "1OTMU9x3KaOtN1C0oPp0j+ABVuf1qC7Z5n4YB1eHHIg0E7GibcJKxQ7KtoIagO1+",
   render_errors: [view: BowmanWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: Bowman.PubSub, adapter: Phoenix.PubSub.PG2]
+  pubsub: [name: Bowman.PubSub, adapter: Phoenix.PubSub.PG2],
+  live_view: [
+    signing_salt: "bWY5zvJJJTVjKJvc0MSUuZuO5UrMyj6q~"
+  ]
 
 # Configures Elixir's Logger
 config :logger, :console,

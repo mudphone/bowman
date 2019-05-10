@@ -1,6 +1,8 @@
 defmodule BowmanWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :bowman
 
+  socket "/live", Phoenix.LiveView.Socket
+  
   socket "/socket", BowmanWeb.UserSocket,
     websocket: true,
     longpoll: false
