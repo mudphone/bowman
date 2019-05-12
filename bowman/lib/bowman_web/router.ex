@@ -18,6 +18,7 @@ defmodule BowmanWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
+    get "/star", StarController, :index
   end
 
   # Other scopes may use custom stacks.
