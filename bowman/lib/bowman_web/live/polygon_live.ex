@@ -1,10 +1,10 @@
-defmodule BowmanWeb.StarLive do
+defmodule BowmanWeb.PolygonLive do
   use Phoenix.LiveView
   alias StarPolygons.Plan
   alias BowmanWeb.StarView
 
   def render(assigns) do
-    StarView.render("star.html", assigns)
+    StarView.render("polygon.html", assigns)
   end
 
   def mount(_session, socket) do
