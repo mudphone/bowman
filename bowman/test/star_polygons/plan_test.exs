@@ -8,22 +8,25 @@ defmodule StarPolygons.PlanTest do
     forall n <- three_or_more() do
       res = Plan.get_thetas(n)
 
-      length(res) == n     and
-      List.first(res) != 0 and
-      check_every_two(res)
+      length(res) == n                   and
+      List.first(res) != 0               and
+      check_spans_between_neighbors(res) and
+      check_in_order(res)
     end
   end
 
-  def check_every_two(thetas) do
+  def check_in_order(thetas) do
+    thetas == Enum.sort(thetas)
+  end
+  
+  def check_spans_between_neighbors(thetas) do
     num_points = length(thetas)
     span = :math.pi() * 2 / num_points
     thetas
     |> Enum.chunk_every(2, 1, :discard)
-    |> Enum.all?(&span_is_correct(&1, span))
-  end
-
-  def span_is_correct([p1, p2], span) do
-    within_delta(p2 - p1, span, 0.0001)
+    |> Enum.all?(fn [p1, p2] ->
+      within_delta(p2 - p1, span, 0.0001)
+    end)
   end
 
   def within_delta(v1, v2, delta) do
