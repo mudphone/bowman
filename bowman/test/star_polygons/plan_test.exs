@@ -6,12 +6,12 @@ defmodule StarPolygons.PlanTest do
 
   property "calculate thetas for points" do
     forall n <- three_or_more() do
-      res = Plan.get_thetas(n)
+      thetas = Plan.get_thetas(n)
 
-      length(res) == n                   and
-      List.first(res) != 0               and
-      check_spans_between_neighbors(res) and
-      check_in_order(res)
+      length(thetas) == n                   and
+      List.first(thetas) != 0               and
+      check_spans_between_neighbors(thetas) and
+      check_in_order(thetas)
     end
   end
 
