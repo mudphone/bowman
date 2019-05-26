@@ -62,7 +62,7 @@ config :bowman, BowmanWeb.Endpoint,
       ~r"priv/gettext/.*(po)$",
       ~r"lib/bowman_web/{live,views}/.*(ex)$",
       ~r"lib/bowman_web/templates/.*(eex)$",
-      ~r{lib/my_app_web/live/.*(ex)$}
+      ~r{lib/bowman_web/live/.*(ex)$}
     ]
   ]
 

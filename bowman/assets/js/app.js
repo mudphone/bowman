@@ -16,6 +16,13 @@ import "phoenix_html"
 // Local files can be imported directly using relative paths, for example:
 // import socket from "./socket"
 
+// IE11 LiveView polyfills
+import "mdn-polyfills/NodeList.prototype.forEach"
+import "mdn-polyfills/Element.prototype.closest"
+import "mdn-polyfills/Element.prototype.matches"
+import "url-search-params-polyfill"
+import "formdata-polyfill"
+
 // Enable connecting to a LiveView socket
 import LiveSocket from "phoenix_live_view"
 let liveSocket = new LiveSocket("/live")

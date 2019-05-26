@@ -1,0 +1,9 @@
+
+<form class="slidecontainer" phx-change="point_change">
+  Num Points: <%= @num_points %>
+  <input type="range" min="3" max="30" value="<%= @num_points %>" class="slider" name="num_points">
+</form>
+<button phx-click="click" class="minus">click me</button>
+<svg id="svgelem" width="<%= @size %>" height="<%= @size %>" xmlns="http://www.w3.org/2000/svg">
+  <polygon points="<%= @point_locations %>"/>
+</svg>

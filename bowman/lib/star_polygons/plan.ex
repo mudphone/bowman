@@ -4,8 +4,10 @@ defmodule StarPolygons.Plan do
   @enforce_keys [:size, :points, :density, :point_locations]
   defstruct [:size, :points, :density, :point_locations]
 
+  # Public API
+
   def new(size, points, density) when points > 0 and density > 0 and points > density do
-    locations = get_point_locations(size, points, density)
+    locations = get_point_locations(size, points)
     %Plan{size: size, points: points, density: density, point_locations: locations}
   end
 
@@ -13,7 +15,24 @@ defmodule StarPolygons.Plan do
     {:error, :invalid_plan}
   end
 
-  defp get_point_locations(size, points, density) do
+  def point_locations(%Plan{point_locations: locations} = plan) do
+    locations
+  end
+
+  def point_locations_for_svg_polygon(%Plan{} = plan) do
+    plan
+    |> Plan.point_locations()
+    |> Enum.reduce("", fn {x, y}, acc ->
+      x = Float.round(x, 1)
+      y = Float.round(y, 1)
+      acc <> " #{x},#{y}"
+    end)
+    |> String.trim()
+  end
+
+  # Internal API
+
+  defp get_point_locations(size, points) do
     thetas = get_thetas(points)
 
     coords = Enum.map(thetas, &polar_to_cartesian(size, &1))
@@ -30,6 +49,7 @@ defmodule StarPolygons.Plan do
     # offset so first point is at top
     offset = :math.pi() / 2
     span = :math.pi() * 2 / n
+
     0..(n - 1)
     |> Enum.map(&(&1 * span + offset))
   end

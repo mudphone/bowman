@@ -19,6 +19,7 @@ defmodule BowmanWeb.Router do
 
     get "/", PageController, :index
     get "/star", StarController, :index
+    live "/livestar", StarLive
   end
 
   # Other scopes may use custom stacks.
