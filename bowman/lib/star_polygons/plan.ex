@@ -31,10 +31,6 @@ defmodule StarPolygons.Plan do
     __MODULE__.get_lines(point_locations, density)
   end
 
-  def max_density(num_points) when Integer.is_even(num_points) do
-    div(num_points, 2) - 1
-  end
-
   def max_density(num_points), do: div(num_points, 2)
 
   def update_num_points(%__MODULE__{size: size, density: density} = plan, num_points) do
