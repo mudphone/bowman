@@ -1,6 +1,8 @@
 <form class="slidecontainer" phx-change="point_change">
   Number of Vertices: <%= @num_points %>
   <input type="range" min="3" max="30" value="<%= @num_points %>" class="slider" name="num_points">
+  <button phx-click="dec_vertices" class="minus">-</button>
+  <button phx-click="inc_vertices" class="plus">+</button>
   <br/>
   Density: <%= @density %>
   <input type="range" min="1" max="<%= @max_density %>" value="<%= @density %>" class="slider" name="density">

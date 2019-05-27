@@ -1,27 +1,26 @@
 defmodule StarPolygons.Plan do
   alias __MODULE__
+  require Integer
 
-  @enforce_keys [:size, :points, :density, :point_locations]
-  defstruct [:size, :points, :density, :point_locations]
+  @enforce_keys [:size, :num_points, :density, :point_locations]
+  defstruct [:size, :num_points, :density, :point_locations]
 
+  # ========================================================+
   # Public API
+  # ========================================================+
 
-  def new(size, points, density) when points > 0 and density > 0 and points > density do
-    locations = get_point_locations(size, points)
-    %Plan{size: size, points: points, density: density, point_locations: locations}
+  def new(size, num_points, density)
+      when num_points > 0 and density > 0 and num_points > density do
+    locations = get_point_locations(size, num_points)
+    %Plan{size: size, num_points: num_points, density: density, point_locations: locations}
   end
 
-  def new(_size, _points, _density) do
+  def new(_size, _num_points, _density) do
     {:error, :invalid_plan}
   end
 
-  def point_locations(%Plan{point_locations: locations}) do
-    locations
-  end
-
   def point_locations_for_svg_polygon(%Plan{} = plan) do
-    plan
-    |> Plan.point_locations()
+    plan.point_locations
     |> Enum.reduce("", fn {x, y}, acc ->
       acc <> " #{x},#{y}"
     end)
@@ -32,7 +31,23 @@ defmodule StarPolygons.Plan do
     __MODULE__.get_lines(point_locations, density)
   end
 
+  def max_density(num_points) when Integer.is_even(num_points) do
+    div(num_points, 2) - 1
+  end
+
+  def max_density(num_points), do: div(num_points, 2)
+
+  def update_num_points(%__MODULE__{size: size, density: density} = plan, num_points) do
+    __MODULE__.new(size, num_points, density)
+  end
+
+  def update_density(%__MODULE__{size: size, num_points: num_points} = plan, density) do
+    __MODULE__.new(size, num_points, density)
+  end
+
+  # ========================================================+
   # Internal API
+  # ========================================================+
 
   def get_lines(point_locs, density) do
     num_points = length(point_locs)
