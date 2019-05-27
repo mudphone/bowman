@@ -29,18 +29,17 @@ defmodule BowmanWeb.StarLive do
   def handle_event(
         "point_change",
         %{"num_points" => num_points, "density" => density},
-        %{assigns: %{size: size}} = socket
+        %{assigns: %{size: size, plan: plan}} = socket
       ) do
     num_points = String.to_integer(num_points)
     density = String.to_integer(density)
     max_d = Plan.max_density(num_points)
-
-    line_coords =
-      Plan.new(size, num_points, density)
-      |> Plan.line_coords_for_svg_star()
+    plan = Plan.new(size, num_points, density)
+    line_coords = Plan.line_coords_for_svg_star(plan)
 
     {:noreply,
      assign(socket,
+       plan: plan,
        num_points: num_points,
        line_coords: line_coords,
        density: density,
@@ -49,15 +48,25 @@ defmodule BowmanWeb.StarLive do
   end
 
   def handle_event("dec_vertices", _, %{assigns: %{num_points: num_points, plan: plan}} = socket) do
-    num_points = num_points - 1
-    plan = Plan.update_num_points(plan, num_points)
+    plan = Plan.update_num_points(plan, num_points - 1)
     socket = assign_socket_from_plan(socket, plan)
     {:noreply, socket}
   end
 
   def handle_event("inc_vertices", _, %{assigns: %{num_points: num_points, plan: plan}} = socket) do
-    num_points = num_points + 1
-    plan = Plan.update_num_points(plan, num_points)
+    plan = Plan.update_num_points(plan, num_points + 1)
+    socket = assign_socket_from_plan(socket, plan)
+    {:noreply, socket}
+  end
+
+  def handle_event("dec_density", _, %{assigns: %{density: density, plan: plan}} = socket) do
+    plan = Plan.update_density(plan, density - 1)
+    socket = assign_socket_from_plan(socket, plan)
+    {:noreply, socket}
+  end
+
+  def handle_event("inc_density", _, %{assigns: %{density: density, plan: plan}} = socket) do
+    plan = Plan.update_density(plan, density + 1)
     socket = assign_socket_from_plan(socket, plan)
     {:noreply, socket}
   end
@@ -69,6 +78,7 @@ defmodule BowmanWeb.StarLive do
     max_d = Plan.max_density(num_points)
 
     assign(socket,
+      plan: plan,
       num_points: num_points,
       line_coords: line_coords,
       density: density,

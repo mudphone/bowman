@@ -6,7 +6,10 @@
   <br/>
   Density: <%= @density %>
   <input type="range" min="1" max="<%= @max_density %>" value="<%= @density %>" class="slider" name="density">
+  <button phx-click="dec_density" class="minus">-</button>
+  <button phx-click="inc_density" class="plus">+</button>
 </form>
+
 <svg id="svgelem" width="<%= @size %>" height="<%= @size %>" xmlns="http://www.w3.org/2000/svg">
   <%= for [{x1,y1}, {x2,y2}] <- @line_coords do %>
      <line x1="<%= x1 %>" y1="<%= y1 %>"
