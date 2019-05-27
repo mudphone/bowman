@@ -1,1 +1,13 @@
-<h2>Star</h2>
+<form class="slidecontainer" phx-change="point_change">
+  Number of Vertices: <%= @num_points %>
+  <input type="range" min="3" max="30" value="<%= @num_points %>" class="slider" name="num_points">
+  <br/>
+  Density: <%= @density %>
+  <input type="range" min="1" max="<%= @max_density %>" value="<%= @density %>" class="slider" name="density">
+</form>
+<svg id="svgelem" width="<%= @size %>" height="<%= @size %>" xmlns="http://www.w3.org/2000/svg">
+  <%= for [{x1,y1}, {x2,y2}] <- @line_coords do %>
+     <line x1="<%= x1 %>" y1="<%= y1 %>"
+           x2="<%= x2 %>" y2="<%= y2 %>" stroke="black" />
+  <% end %>
+</svg>
