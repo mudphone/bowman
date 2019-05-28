@@ -23,9 +23,18 @@ defmodule StarPolygons.Plan do
   def max_points, do: @max_points
 
   def new(size, num_points, density)
-      when num_points >= @min_points and density > 0 and density <= max_density(num_points) do
+      when num_points >= @min_points and
+             density > 0 and
+             density <= max_density(num_points) do
     locations = get_point_locations(size, num_points)
-    plan = %Plan{size: size, num_points: num_points, density: density, point_locations: locations}
+
+    plan = %__MODULE__{
+      size: size,
+      num_points: num_points,
+      density: density,
+      point_locations: locations
+    }
+
     {:ok, plan}
   end
 
@@ -33,7 +42,7 @@ defmodule StarPolygons.Plan do
     {:error, :invalid_plan}
   end
 
-  def point_locations_for_svg_polygon(%Plan{} = plan) do
+  def point_locations_for_svg_polygon(%__MODULE__{} = plan) do
     plan.point_locations
     |> Enum.reduce("", fn {x, y}, acc ->
       acc <> " #{x},#{y}"
@@ -41,7 +50,7 @@ defmodule StarPolygons.Plan do
     |> String.trim()
   end
 
-  def line_coords_for_svg_star(%Plan{point_locations: point_locations, density: density}) do
+  def line_coords_for_svg_star(%__MODULE__{point_locations: point_locations, density: density}) do
     __MODULE__.get_lines(point_locations, density)
   end
 
