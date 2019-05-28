@@ -6,7 +6,7 @@ defmodule StarPolygons.Plan do
   defstruct [:size, :num_points, :density, :point_locations]
 
   @min_points 3
-  @max_points 200
+  @max_points 100
 
   # ========================================================+
   # Public API
