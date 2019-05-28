@@ -1,23 +1,13 @@
 <form class="slidecontainer" phx-change="point_change">
   Number of Vertices: <%= @num_points %>
-  <input type="range" min="<%= @min_points %>" max="<%= @max_points %>" value="<%= @num_points %>" class="slider" name="num_points">
-  <%= if @num_points > @min_points do %>
-    <button phx-click="dec_vertices" class="minus">-</button>
-  <% end %>
-  <%= if @num_points < @max_points do %>
-    <button phx-click="inc_vertices" class="plus">+</button>
-  <% end %>
+  <input type="range" min="<%= min_points %>" max="<%= max_points %>" value="<%= @num_points %>" class="slider" name="num_points">
+  <button phx-click="dec_vertices" class="minus" <%= enable_points_dec(@num_points) %>>-</button>
+  <button phx-click="inc_vertices" class="plus" <%= enable_points_inc(@num_points) %>>+</button>
   <br/>
   Density: <%= @density %>
-  <%= if @max_density != 1 do %>
-  <input type="range" min="1" max="<%= @max_density %>" value="<%= @density %>" class="slider" name="density">
-  <%= if @density > 1 do %>
-    <button phx-click="dec_density" class="minus">-</button>
-  <% end %>
-  <%= if @density < @max_density do %>
-    <button phx-click="inc_density" class="plus">+</button>
-  <% end %>
-  <% end %>
+  <input type="range" min="1" max="<%= @max_density %>" value="<%= @density %>" class="slider" name="density" <%= enable_density_slider(@max_density) %>>
+  <button phx-click="dec_density" class="minus" <%= enable_density_dec(@density, @max_density) %>>-</button>
+  <button phx-click="inc_density" class="plus" <%= enable_density_inc(@density, @max_density) %>>+</button>
 </form>
 
 <svg id="svgelem" width="<%= @size %>" height="<%= @size %>" xmlns="http://www.w3.org/2000/svg">

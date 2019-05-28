@@ -9,22 +9,14 @@ defmodule BowmanWeb.StarLive do
   end
 
   def mount(_session, socket) do
-    num_points = 6
-    density = 2
-    max_d = Plan.max_density(num_points)
     width = 200
+    num_points = 3
+    density = 1
     {:ok, plan} = Plan.new(width, num_points, density)
 
     socket =
-      socket
-      |> assign(:plan, plan)
+      assign_socket_from_plan(socket, plan)
       |> assign(:size, width)
-      |> assign(:num_points, num_points)
-      |> assign(:min_points, Plan.min_points())
-      |> assign(:max_points, Plan.max_points())
-      |> assign(:density, density)
-      |> assign(:max_density, max_d)
-      |> assign(:line_coords, Plan.line_coords_for_svg_star(plan))
 
     {:ok, socket}
   end
@@ -37,8 +29,10 @@ defmodule BowmanWeb.StarLive do
     num_points = String.to_integer(num_points)
 
     density =
-      Map.get(params, "density", "1")
-      |> String.to_integer()
+      case Map.get(params, "density") do
+        nil -> plan.density
+        d -> String.to_integer(d)
+      end
 
     {:ok, plan} = Plan.update(plan, num_points, density)
     socket = assign_socket_from_plan(socket, plan)
