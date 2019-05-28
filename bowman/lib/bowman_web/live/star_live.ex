@@ -9,7 +9,7 @@ defmodule BowmanWeb.StarLive do
   end
 
   def mount(_session, socket) do
-    width = 200
+    width = 400
     num_points = 6
     density = 2
     {:ok, plan} = Plan.new(width, num_points, density)
