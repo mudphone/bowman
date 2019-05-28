@@ -67,7 +67,8 @@ defmodule StarPolygons.Plan do
     __MODULE__.new(size, num_points, density)
   end
 
-  def update(%__MODULE__{size: size}, num_points, density) when num_points >= @min_points do
+  def update(%__MODULE__{size: size}, num_points, density)
+      when num_points >= @min_points do
     density = constrain_density(density, num_points)
     __MODULE__.new(size, num_points, density)
   end
