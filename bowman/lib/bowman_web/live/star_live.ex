@@ -20,6 +20,8 @@ defmodule BowmanWeb.StarLive do
       |> assign(:plan, plan)
       |> assign(:size, width)
       |> assign(:num_points, num_points)
+      |> assign(:min_points, Plan.min_points())
+      |> assign(:max_points, Plan.max_points())
       |> assign(:density, density)
       |> assign(:max_density, max_d)
       |> assign(:line_coords, Plan.line_coords_for_svg_star(plan))
@@ -29,11 +31,15 @@ defmodule BowmanWeb.StarLive do
 
   def handle_event(
         "point_change",
-        %{"num_points" => num_points, "density" => density},
+        %{"num_points" => num_points} = params,
         %{assigns: %{plan: plan}} = socket
       ) do
     num_points = String.to_integer(num_points)
-    density = String.to_integer(density)
+
+    density =
+      Map.get(params, "density", "1")
+      |> String.to_integer()
+
     {:ok, plan} = Plan.update(plan, num_points, density)
     socket = assign_socket_from_plan(socket, plan)
     {:noreply, socket}

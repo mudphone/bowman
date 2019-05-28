@@ -6,6 +6,7 @@ defmodule StarPolygons.Plan do
   defstruct [:size, :num_points, :density, :point_locations]
 
   @min_points 3
+  @max_points 200
 
   # ========================================================+
   # Public API
@@ -18,6 +19,8 @@ defmodule StarPolygons.Plan do
   end
 
   def min_points, do: @min_points
+
+  def max_points, do: @max_points
 
   def new(size, num_points, density)
       when num_points >= @min_points and density > 0 and density <= max_density(num_points) do
