@@ -5,14 +5,25 @@ defmodule StarPolygons.Plan do
   @enforce_keys [:size, :num_points, :density, :point_locations]
   defstruct [:size, :num_points, :density, :point_locations]
 
+  @min_points 3
+
   # ========================================================+
   # Public API
   # ========================================================+
 
+  defmacro max_density(num_points) do
+    quote do
+      div(unquote(num_points), 2)
+    end
+  end
+
+  def min_points, do: @min_points
+
   def new(size, num_points, density)
-      when num_points > 0 and density > 0 and num_points > density do
+      when num_points >= @min_points and density > 0 and density <= max_density(num_points) do
     locations = get_point_locations(size, num_points)
-    %Plan{size: size, num_points: num_points, density: density, point_locations: locations}
+    plan = %Plan{size: size, num_points: num_points, density: density, point_locations: locations}
+    {:ok, plan}
   end
 
   def new(_size, _num_points, _density) do
@@ -31,19 +42,31 @@ defmodule StarPolygons.Plan do
     __MODULE__.get_lines(point_locations, density)
   end
 
-  def max_density(num_points), do: div(num_points, 2)
+  # def max_density(num_points), do: div(num_points, 2)
 
   def update_num_points(%__MODULE__{size: size, density: density} = plan, num_points) do
+    num_points = Enum.max([num_points, @min_points])
+    density = constrain_density(density, num_points)
     __MODULE__.new(size, num_points, density)
   end
 
   def update_density(%__MODULE__{size: size, num_points: num_points} = plan, density) do
+    density = constrain_density(density, num_points)
+    __MODULE__.new(size, num_points, density)
+  end
+
+  def update(%__MODULE__{size: size}, num_points, density) when num_points >= @min_points do
+    density = constrain_density(density, num_points)
     __MODULE__.new(size, num_points, density)
   end
 
   # ========================================================+
   # Internal API
   # ========================================================+
+
+  def constrain_density(density, num_points) do
+    Enum.min([max_density(num_points), Enum.max([1, density])])
+  end
 
   def get_lines(point_locs, density) do
     num_points = length(point_locs)
